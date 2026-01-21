@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Learning Bot - Web Version</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0088cc;
+            --primary-dark: #006699;
+            --secondary: #25d366;
+            --light-bg: #f0f0f0;
+            --dark-bg: #1a1a1a;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --text-light: #666666;
+            --border: #e0e0e0;
+            --correct: #4caf50;
+            --incorrect: #f44336;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            min-height: 90vh;
+        }
+
+        .header {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header i {
+            font-size: 28px;
+            background: rgba(255,255,255,0.2);
+            padding: 10px;
+            border-radius: 50%;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .header .subtitle {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .penguin-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .main-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-height: 70vh;
+        }
+
+        .welcome-message {
+            background: linear-gradient(to right, #e3f2fd, #bbdefb);
+            padding: 20px;
+            border-radius: var(--radius);
+            border-left: 5px solid var(--primary);
+        }
+
+        .welcome-message h2 {
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .level-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .level-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .level-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border-color: var(--primary);
+        }
+
+        .level-card i {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .level-card h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--primary-dark);
+        }
+
+        .level-card p {
+            color: var(--text-light);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .menu-btn {
+            background: white;
+            border: none;
+            padding: 20px;
+            border-radius: var(--radius);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+        }
+
+        .menu-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .menu-btn:hover i {
+            color: white;
+        }
+
+        .menu-btn i {
+            font-size: 28px;
+            color: var(--primary);
+        }
+
+        .topic-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .topic-item {
+            background: white;
+            padding: 18px;
+            border-radius: var(--radius);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .topic-item:hover {
+            background: #f0f7ff;
+            transform: translateX(5px);
+        }
+
+        .progress-badge {
+            background: var(--light-bg);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .test-question {
+            background: white;
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin: 20px 0;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .option-btn {
+            padding: 16px;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: #f8fdff;
+        }
+
+        .option-btn.correct {
+            background: #e8f5e9;
+            border-color: var(--correct);
+            color: var(--correct);
+        }
+
+        .option-btn.incorrect {
+            background: #ffebee;
+            border-color: var(--incorrect);
+            color: var(--incorrect);
+        }
+
+        .navigation {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--light-bg);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .results-table th, .results-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .results-table th {
+            background: #f5f5f5;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .results-table tr:hover {
+            background: #f9f9f9;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--light-bg);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .page {
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .word-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .word-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+
+        .test-result {
+            background: white;
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin: 20px 0;
+        }
+
+        .result-score {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .result-percentage {
+            font-size: 24px;
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        .answer-detail {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
+
+        .answer-correct {
+            border-left: 4px solid var(--correct);
+        }
+
+        .answer-incorrect {
+            border-left: 4px solid var(--incorrect);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-light);
+            font-size: 14px;
+            border-top: 1px solid var(--border);
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 0;
+                min-height: 100vh;
+            }
+            
+            body {
+                padding: 0;
+            }
+            
+            .level-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="penguin-icon">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div>
+                <h1>English Learning Bot</h1>
+                <div class="subtitle">Пингвин Пенни поможет выучить английский</div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Страница приветствия -->
+            <div id="page-welcome" class="page">
+                <div class="welcome-message">
+                    <h2><i class="fas fa-hand-wave"></i> Добро пожаловать!</h2>
+                    <p>Привет! Я бот для изучения английского языка! Я пингвин Пенни и я помогу тебе выучить английский. С моей помощью ты сможешь узнать много новых слов и понять английскую грамматику. Также, для проверки предусмотрены тесты для каждой темы. Ты готов начать? Let's start!</p>
+                    <p style="margin-top: 10px; font-weight: 600;">Выбери свой уровень:</p>
+                </div>
+
+                <div class="level-cards">
+                    <div class="level-card" onclick="selectLevel('A1-A2')">
+                        <i class="fas fa-seedling"></i>
+                        <h3>Начальный (A1-A2)</h3>
+                        <p>Основные слова и простые грамматические конструкции для начинающих</p>
+                    </div>
+                    
+                    <div class="level-card" onclick="selectLevel('B1-B2')">
+                        <i class="fas fa-tree"></i>
+                        <h3>Средний (B1-B2)</h3>
+                        <p>Более сложная лексика и грамматика для уверенного общения</p>
+                    </div>
+                    
+                    <div class="level-card" onclick="selectLevel('C1-C2')">
+                        <i class="fas fa-mountain"></i>
+                        <h3>Продвинутый (C1-C2)</h3>
+                        <p>Сложная лексика и продвинутая грамматика для свободного владения</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Страница выбора раздела -->
+            <div id="page-level" class="page hidden">
+                <h2 id="level-title"></h2>
+                <p style="margin-bottom: 20px; color: var(--text-light);">Что вы хотите изучать?</p>
+                
+                <div class="menu-grid">
+                    <div class="menu-btn" onclick="showVocabulary()">
+                        <i class="fas fa-book"></i>
+                        <span>Словарный запас</span>
+                    </div>
+                    
+                    <div class="menu-btn" onclick="showGrammar()">
+                        <i class="fas fa-language"></i>
+                        <span>Грамматика</span>
+                    </div>
+                    
+                    <div class="menu-btn" onclick="showResults()">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Мои результаты</span>
+                    </div>
+                    
+                    <div class="menu-btn" onclick="backToLevels()">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Выбрать другой уровень</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Страница тем словаря -->
+            <div id="page-vocabulary" class="page hidden">
+                <h2><i class="fas fa-book"></i> Словарный запас</h2>
+                <p id="vocab-subtitle" style="margin-bottom: 20px; color: var(--text-light);"></p>
+                
+                <div id="vocabulary-topics" class="topic-list">
+                    <!-- Темы будут загружены динамически -->
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="backToLevelMenu()">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
+                </div>
+            </div>
+
+            <!-- Страница тем грамматики -->
+            <div id="page-grammar" class="page hidden">
+                <h2><i class="fas fa-language"></i> Грамматика</h2>
+                <p id="grammar-subtitle" style="margin-bottom: 20px; color: var(--text-light);"></p>
+                
+                <div id="grammar-topics" class="topic-list">
+                    <!-- Темы будут загружены динамически -->
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="backToLevelMenu()">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
+                </div>
+            </div>
+
+            <!-- Страница темы -->
+            <div id="page-topic" class="page hidden">
+                <h2 id="topic-title"></h2>
+                <div id="topic-content"></div>
+                
+                <div id="test-button" class="hidden" style="margin: 20px 0;">
+                    <button class="btn btn-primary" onclick="startTest()" style="padding: 15px 30px; font-size: 16px;">
+                        <i class="fas fa-play-circle"></i> Пройти тест
+                    </button>
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="backToTopicList()">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
+                    <button class="btn btn-secondary" onclick="backToLevels()">
+                        <i class="fas fa-home"></i> В главное меню
+                    </button>
+                </div>
+            </div>
+
+            <!-- Страница теста -->
+            <div id="page-test" class="page hidden">
+                <h2 id="test-title"></h2>
+                <div id="test-progress" style="margin: 10px 0; color: var(--text-light);"></div>
+                
+                <div class="test-question">
+                    <h3 id="question-text"></h3>
+                    <div id="options-container" class="options-grid"></div>
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="cancelTest()">
+                        <i class="fas fa-times"></i> Отменить тест
+                    </button>
+                </div>
+            </div>
+
+            <!-- Страница результатов теста -->
+            <div id="page-test-result" class="page hidden">
+                <div class="test-result">
+                    <h2><i class="fas fa-trophy"></i> Тест завершен!</h2>
+                    <div class="result-score" id="final-score"></div>
+                    <div class="result-percentage" id="percentage"></div>
+                    
+                    <div id="result-details" style="margin-top: 30px;"></div>
+                    
+                    <div id="result-message" style="margin: 20px 0; padding: 15px; border-radius: 10px; background: #f0f7ff;"></div>
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-primary" onclick="restartTest()">
+                        <i class="fas fa-redo"></i> Пройти еще раз
+                    </button>
+                    <button class="btn btn-secondary" onclick="backToTopic()">
+                        <i class="fas fa-arrow-left"></i> К теме
+                    </button>
+                    <button class="btn btn-secondary" onclick="backToLevels()">
+                        <i class="fas fa-home"></i> В главное меню
+                    </button>
+                </div>
+            </div>
+
+            <!-- Страница результатов пользователя -->
+            <div id="page-results" class="page hidden">
+                <h2><i class="fas fa-chart-bar"></i> Мои результаты</h2>
+                <p id="results-subtitle" style="margin-bottom: 20px; color: var(--text-light);"></p>
+                
+                <div id="results-content"></div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="backToLevelMenu()">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
+                    <button class="btn btn-secondary" onclick="backToLevels()">
+                        <i class="fas fa-home"></i> В главное меню
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>English Learning Bot Web Version © 2023 | Все данные хранятся локально в вашем браузере</p>
+            <p style="margin-top: 5px; font-size: 12px;">Для работы приложения требуется включенный JavaScript</p>
+        </div>
+    </div>
+
+    <script>
+        // Данные бота (аналогичные Python версии)
+        const LEVELS_DATA = {
+            "A1-A2": {
+                "vocabulary": {
+                    "topics": ["Основные глаголы", "Семья", "Еда", "Дом", "Работа"],
+                    "words": {
+                        "Основные глаголы": ["be", "have", "do", "go", "come", "see", "want", "need"],
+                        "Семья": ["mother", "father", "sister", "brother", "parents", "children"],
+                        "Еда": ["apple", "bread", "water", "coffee", "meat", "vegetables"],
+                        "Дом": ["room", "kitchen", "bed", "table", "chair", "window"],
+                        "Работа": ["work", "office", "colleague", "meeting", "computer", "desk"]
+                    },
+                    "tests": {
+                        "Основные глаголы": [
+                            {"question": "Переведите: быть", "options": ["be", "have", "do", "go"], "answer": 0},
+                            {"question": "Переведите: иметь", "options": ["be", "have", "do", "go"], "answer": 1},
+                            {"question": "Переведите: делать", "options": ["be", "have", "do", "go"], "answer": 2},
+                            {"question": "Переведите: идти", "options": ["be", "have", "do", "go"], "answer": 3},
+                            {"question": "Переведите: видеть", "options": ["see", "want", "need", "come"], "answer": 0}
+                        ],
+                        "Семья": [
+                            {"question": "Переведите: мать", "options": ["father", "mother", "sister", "brother"], "answer": 1},
+                            {"question": "Переведите: отец", "options": ["father", "mother", "sister", "brother"], "answer": 0},
+                            {"question": "Переведите: сестра", "options": ["father", "mother", "sister", "brother"], "answer": 2},
+                            {"question": "Переведите: брат", "options": ["father", "mother", "sister", "brother"], "answer": 3},
+                            {"question": "Переведите: родители", "options": ["children", "parents", "family", "relatives"], "answer": 1}
+                        ],
+                        "Еда": [
+                            {"question": "Переведите: яблоко", "options": ["bread", "apple", "water", "coffee"], "answer": 1},
+                            {"question": "Переведите: хлеб", "options": ["bread", "apple", "water", "coffee"], "answer": 0},
+                            {"question": "Переведите: вода", "options": ["bread", "apple", "water", "coffee"], "answer": 2},
+                            {"question": "Переведите: кофе", "options": ["bread", "apple", "water", "coffee"], "answer": 3},
+                            {"question": "Переведите: мясо", "options": ["vegetables", "meat", "fruit", "drink"], "answer": 1}
+                        ]
+                    }
+                },
+                "grammar": {
+                    "topics": ["Present Simple", "Артикли", "Множественное число", "Притяжательные местоимения"],
+                    "exercises": {
+                        "Present Simple": "I _ (work) every day. → I work every day.",
+                        "Артикли": "This is _ apple. → This is an apple.",
+                        "Множественное число": "One cat, two _ . → One cat, two cats.",
+                        "Притяжательные местоимения": "This is _ (я) book. → This is my book."
+                    },
+                    "tests": {
+                        "Present Simple": [
+                            {"question": "I _ (to like) coffee.", "options": ["likes", "like", "am liking", "liked"], "answer": 1},
+                            {"question": "She _ (to work) in an office.", "options": ["work", "works", "working", "worked"], "answer": 1},
+                            {"question": "They _ (to live) in London.", "options": ["lives", "live", "living", "lived"], "answer": 1},
+                            {"question": "He _ (not/to speak) French.", "options": ["don't speak", "doesn't speak", "not speak", "speaks not"], "answer": 1},
+                            {"question": "___ you _ (to understand) me?", "options": ["Do/understand", "Does/understand", "Are/understanding", "Have/understood"], "answer": 0}
+                        ],
+                        "Артикли": [
+                            {"question": "This is _ interesting book.", "options": ["a", "an", "the", "-"], "answer": 1},
+                            {"question": "I saw _ movie yesterday.", "options": ["a", "an", "the", "-"], "answer": 0},
+                            {"question": "___ sun is shining.", "options": ["A", "An", "The", "-"], "answer": 2},
+                            {"question": "She is _ doctor.", "options": ["a", "an", "the", "-"], "answer": 0},
+                            {"question": "I don't like _ milk.", "options": ["a", "an", "the", "-"], "answer": 3}
+                        ]
+                    }
+                }
+            },
+            "B1-B2": {
+                "vocabulary": {
+                    "topics": ["Идиомы", "Деловая лексика", "Академические слова", "Фразовые глаголы"],
+                    "words": {
+                        "Идиомы": ["break the ice", "piece of cake", "hit the books", "cost an arm and a leg"],
+                        "Деловая лексика": ["negotiate", "deadline", "budget", "strategy", "efficient"],
+                        "Академические слова": ["analyze", "conclude", "evidence", "theory", "research"],
+                        "Фразовые глаголы": ["give up", "look forward to", "get along with", "run out of"]
+                    },
+                    "tests": {
+                        "Идиомы": [
+                            {"question": "What does 'break the ice' mean?", "options": ["To start a conversation", "To break something", "To be cold", "To make friends"], "answer": 0},
+                            {"question": "What does 'piece of cake' mean?", "options": ["Something delicious", "Something easy", "A dessert", "A problem"], "answer": 1},
+                            {"question": "What does 'hit the books' mean?", "options": ["To study hard", "To destroy books", "To buy books", "To organize books"], "answer": 0},
+                            {"question": "What does 'cost an arm and a leg' mean?", "options": ["To be expensive", "To be painful", "To be dangerous", "To be valuable"], "answer": 0}
+                        ],
+                        "Деловая лексика": [
+                            {"question": "Переведите: переговоры", "options": ["negotiation", "deadline", "budget", "strategy"], "answer": 0},
+                            {"question": "Переведите: срок сдачи", "options": ["negotiation", "deadline", "budget", "strategy"], "answer": 1},
+                            {"question": "Переведите: бюджет", "options": ["negotiation", "deadline", "budget", "strategy"], "answer": 2},
+                            {"question": "Переведите: стратегия", "options": ["negotiation", "deadline", "budget", "strategy"], "answer": 3}
+                        ]
+                    }
+                },
+                "grammar": {
+                    "topics": ["Present Perfect", "Условные предложения", "Пассивный залог", "Косвенная речь"],
+                    "exercises": {
+                        "Present Perfect": "I _ (never/visit) London. → I have never visited London.",
+                        "Условные предложения": "If I _ (have) time, I would help you. → If I had time, I would help you.",
+                        "Пассивный залог": "The book _ (write) by a famous author. → The book was written by a famous author.",
+                        "Косвенная речь": "She said: 'I am tired.' → She said that she _ tired. → She said that she was tired."
+                    },
+                    "tests": {
+                        "Present Perfect": [
+                            {"question": "I _ (never/see) that movie.", "options": ["never saw", "have never seen", "never see", "am never seeing"], "answer": 1},
+                            {"question": "She _ (already/finish) her homework.", "options": ["already finishes", "has already finished", "already finished", "is already finishing"], "answer": 1},
+                            {"question": "___ you ever _ (be) to Paris?", "options": ["Did/be", "Have/been", "Do/be", "Are/being"], "answer": 1},
+                            {"question": "They _ (not/start) the project yet.", "options": ["didn't start", "haven't started", "don't start", "aren't starting"], "answer": 1}
+                        ],
+                        "Условные предложения": [
+                            {"question": "If I _ (have) money, I would buy a car.", "options": ["have", "had", "will have", "would have"], "answer": 1},
+                            {"question": "If she _ (study) harder, she would pass the exam.", "options": ["studies", "studied", "will study", "would study"], "answer": 1},
+                            {"question": "What would you do if you _ (win) the lottery?", "options": ["win", "won", "will win", "would win"], "answer": 1},
+                            {"question": "If I _ (be) you, I would apologize.", "options": ["am", "was", "were", "would be"], "answer": 2}
+                        ]
+                    }
+                }
+            },
+            "C1-C2": {
+                "vocabulary": {
+                    "topics": ["Продвинутая лексика", "Синонимы", "Антонимы", "Сложные идиомы"],
+                    "words": {
+                        "Продвинутая лексика": ["ubiquitous", "ephemeral", "serendipity", "quintessential", "paradigm"],
+                        "Синонимы": ["happy: joyful, delighted, ecstatic", "big: enormous, gigantic, colossal"],
+                        "Антонимы": ["benevolent - malevolent", "ephemeral - permanent", "ambiguous - clear"],
+                        "Сложные идиомы": ["bite the bullet", "the ball is in your court", "burn the midnight oil"]
+                    },
+                    "tests": {
+                        "Продвинутая лексика": [
+                            {"question": "What does 'ubiquitous' mean?", "options": ["Found everywhere", "Very large", "Beautiful", "Dangerous"], "answer": 0},
+                            {"question": "What does 'ephemeral' mean?", "options": ["Lasting a very short time", "Very expensive", "Extremely happy", "Complicated"], "answer": 0},
+                            {"question": "What does 'serendipity' mean?", "options": ["Happy accident", "Sad event", "Planned outcome", "Unexpected problem"], "answer": 0},
+                            {"question": "What does 'quintessential' mean?", "options": ["Perfect example", "Very small", "Completely wrong", "Extremely fast"], "answer": 0}
+                        ],
+                        "Синонимы": [
+                            {"question": "Synonym for 'intelligent'", "options": ["clever", "stupid", "slow", "simple"], "answer": 0},
+                            {"question": "Synonym for 'beautiful'", "options": ["gorgeous", "ugly", "plain", "ordinary"], "answer": 0},
+                            {"question": "Synonym for 'difficult'", "options": ["challenging", "easy", "simple", "basic"], "answer": 0},
+                            {"question": "Synonym for 'important'", "options": ["significant", "unimportant", "minor", "trivial"], "answer": 0}
+                        ]
+                    }
+                },
+                "grammar": {
+                    "topics": ["Инверсия", "Смешанные условные", "Эллипсис", "Сложные времена"],
+                    "exercises": {
+                        "Инверсия": "Never _ I seen such beauty. → Never have I seen such beauty.",
+                        "Смешанные условные": "If I _ (study) harder, I would have passed the exam. → If I had studied harder, I would have passed the exam.",
+                        "Эллипсис": "She can play the piano and he _ the guitar. → She can play the piano and he can the guitar.",
+                        "Сложные времена": "By next year, I _ (work) here for 10 years. → By next year, I will have been working here for 10 years."
+                    },
+                    "tests": {
+                        "Инверсия": [
+                            {"question": "Never _ I been so surprised.", "options": ["have", "has", "had", "did"], "answer": 0},
+                            {"question": "Not only _ she speak French, but also Spanish.", "options": ["does", "do", "is", "has"], "answer": 0},
+                            {"question": "Hardly _ I arrived when it started to rain.", "options": ["had", "have", "did", "was"], "answer": 0},
+                            {"question": "Little _ she know about the surprise.", "options": ["did", "does", "has", "is"], "answer": 0}
+                        ],
+                        "Смешанные условные": [
+                            {"question": "If I _ (know), I would have told you.", "options": ["knew", "had known", "would know", "know"], "answer": 1},
+                            {"question": "If she _ (not/be) so tired, she would have gone to the party.", "options": ["weren't", "hadn't been", "wouldn't be", "isn't"], "answer": 1},
+                            {"question": "He would be happier if he _ (accept) that job offer.", "options": ["accepted", "had accepted", "would accept", "accepts"], "answer": 1},
+                            {"question": "If they _ (invite) us, we would have come.", "options": ["invited", "had invited", "would invite", "invite"], "answer": 1}
+                        ]
+                    }
+                }
+            }
+        };
+
+        // Состояние приложения
+        let currentState = {
+            level: null,
+            topicType: null,
+            topic: null,
+            testData: null
+        };
+
+        // Локальное хранилище для прогресса
+        function initStorage() {
+            if (!localStorage.getItem('englishBotProgress')) {
+                localStorage.setItem('englishBotProgress', JSON.stringify({}));
+            }
+        }
+
+        // Сохранение результатов теста
+        function saveTestResults(level, topicType, topic, score, totalQuestions) {
+            const storage = JSON.parse(localStorage.getItem('englishBotProgress'));
+            const userId = 'user1'; // В веб-версии используем одного пользователя
+            
+            const timestamp = new Date().toISOString();
+            const testId = `${level}_${topicType}_${topic}_${timestamp}`;
+            
+            if (!storage[userId]) storage[userId] = { tests: [], progress: {} };
+            
+            // Сохраняем результат теста
+            storage[userId].tests.push({
+                testId,
+                level,
+                topicType,
+                topic,
+                score,
+                total: totalQuestions,
+                timestamp
+            });
+            
+            // Обновляем прогресс по теме
+            const progressKey = `${level}_${topicType}_${topic}`;
+            storage[userId].progress[progressKey] = {
+                score,
+                totalQuestions,
+                lastAttempt: timestamp
+            };
+            
+            localStorage.setItem('englishBotProgress', JSON.stringify(storage));
+        }
+
+        // Получение прогресса пользователя
+        function getUserProgress(level, topicType) {
+            const storage = JSON.parse(localStorage.getItem('englishBotProgress'));
+            const userId = 'user1';
+            
+            if (!storage[userId]) return {};
+            
+            const result = {};
+            const prefix = `${level}_${topicType}_`;
+            
+            Object.keys(storage[userId].progress).forEach(key => {
+                if (key.startsWith(prefix)) {
+                    const topicName = key.substring(prefix.length);
+                    result[topicName] = storage[userId].progress[key];
+                }
+            });
+            
+            return result;
+        }
+
+        // Получение результатов пользователя по уровню
+        function getUserResults(level) {
+            const storage = JSON.parse(localStorage.getItem('englishBotProgress'));
+            const userId = 'user1';
+            
+            if (!storage[userId]) return [];
+            
+            return storage[userId].tests
+                .filter(test => test.level === level)
+                .map(test => ({
+                    topic_name: test.topic,
+                    topic_type: test.topicType,
+                    score: test.score,
+                    total_questions: test.total,
+                    last_attempt: test.timestamp
+                }));
+        }
+
+        // Навигация по страницам
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.add('hidden');
+            });
+            document.getElementById(pageId).classList.remove('hidden');
+        }
+
+        // Выбор уровня
+        function selectLevel(level) {
+            currentState.level = level;
+            document.getElementById('level-title').textContent = `Уровень: ${level}`;
+            showPage('page-level');
+        }
+
+        // Показать словарь
+        function showVocabulary() {
+            document.getElementById('vocab-subtitle').textContent = `Уровень: ${currentState.level}`;
+            
+            const topicsContainer = document.getElementById('vocabulary-topics');
+            topicsContainer.innerHTML = '';
+            
+            const topics = LEVELS_DATA[currentState.level].vocabulary.topics;
+            const progress = getUserProgress(currentState.level, 'vocabulary');
+            
+            topics.forEach(topic => {
+                const topicProgress = progress[topic] || { score: 0, totalQuestions: 0 };
+                const progressText = topicProgress.totalQuestions > 0 ? 
+                    ` (${topicProgress.score}/${topicProgress.totalQuestions})` : '';
+                
+                const topicItem = document.createElement('div');
+                topicItem.className = 'topic-item';
+                topicItem.innerHTML = `
+                    <div>
+                        <strong>${topic}</strong>
+                        <div style="font-size: 14px; color: var(--text-light); margin-top: 5px;">
+                            ${LEVELS_DATA[currentState.level].vocabulary.words[topic].length} слов
+                        </div>
+                    </div>
+                    <div class="progress-badge">${progressText || 'Нет прогресса'}</div>
+                `;
+                
+                topicItem.onclick = () => showTopic('vocabulary', topic);
+                topicsContainer.appendChild(topicItem);
+            });
+            
+            currentState.topicType = 'vocabulary';
+            showPage('page-vocabulary');
+        }
+
+        // Показать грамматику
+        function showGrammar() {
+            document.getElementById('grammar-subtitle').textContent = `Уровень: ${currentState.level}`;
+            
+            const topicsContainer = document.getElementById('grammar-topics');
+            topicsContainer.innerHTML = '';
+            
+            const topics = LEVELS_DATA[currentState.level].grammar.topics;
+            const progress = getUserProgress(currentState.level, 'grammar');
+            
+            topics.forEach(topic => {
+                const topicProgress = progress[topic] || { score: 0, totalQuestions: 0 };
+                const progressText = topicProgress.totalQuestions > 0 ? 
+                    ` (${topicProgress.score}/${topicProgress.totalQuestions})` : '';
+                
+                const topicItem = document.createElement('div');
+                topicItem.className = 'topic-item';
+                topicItem.innerHTML = `
+                    <div>
+                        <strong>${topic}</strong>
+                    </div>
+                    <div class="progress-badge">${progressText || 'Нет прогресса'}</div>
+                `;
+                
+                topicItem.onclick = () => showTopic('grammar', topic);
+                topicsContainer.appendChild(topicItem);
+            });
+            
+            currentState.topicType = 'grammar';
+            showPage('page-grammar');
+        }
+
+        // Показать тему
+        function showTopic(topicType, topic) {
+            currentState.topicType = topicType;
+            currentState.topic = topic;
+            
+            document.getElementById('topic-title').textContent = `Тема: ${topic}`;
+            
+            const contentDiv = document.getElementById('topic-content');
+            
+            if (topicType === 'vocabulary') {
+                const words = LEVELS_DATA[currentState.level].vocabulary.words[topic] || [];
+                contentDiv.innerHTML = `
+                    <h3><i class="fas fa-list"></i> Слова для изучения:</h3>
+                    <div class="word-list">
+                        ${words.map(word => `<div class="word-card">${word}</div>`).join('')}
+                    </div>
+                `;
+            } else {
+                const exercise = LEVELS_DATA[currentState.level].grammar.exercises[topic] || 'Упражнение не найдено';
+                contentDiv.innerHTML = `
+                    <h3><i class="fas fa-pen"></i> Упражнение:</h3>
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                        <pre style="font-size: 16px; white-space: pre-wrap;">${exercise}</pre>
+                    </div>
+                `;
+            }
+            
+            // Показываем кнопку теста, если тест существует
+            const tests = LEVELS_DATA[currentState.level][topicType].tests;
+            const testButton = document.getElementById('test-button');
+            if (tests && tests[topic]) {
+                testButton.classList.remove('hidden');
+            } else {
+                testButton.classList.add('hidden');
+            }
+            
+            showPage('page-topic');
+        }
+
+        // Начать тест
+        function startTest() {
+            const testQuestions = LEVELS_DATA[currentState.level][currentState.topicType].tests[currentState.topic];
+            
+            if (!testQuestions || testQuestions.length === 0) {
+                alert('Тест для этой темы не найден!');
+                return;
+            }
+            
+            currentState.testData = {
+                questions: testQuestions,
+                currentQuestion: 0,
+                score: 0,
+                userAnswers: []
+            };
+            
+            document.getElementById('test-title').textContent = `Тест: ${currentState.topic}`;
+            showTestQuestion();
+            showPage('page-test');
+        }
+
+        // Показать вопрос теста
+        function showTestQuestion() {
+            const testData = currentState.testData;
+            const questionData = testData.questions[testData.currentQuestion];
+            
+            document.getElementById('question-text').textContent = questionData.question;
+            document.getElementById('test-progress').textContent = 
+                `Вопрос ${testData.currentQuestion + 1} из ${testData.questions.length}`;
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            questionData.options.forEach((option, index) => {
+                const optionBtn = document.createElement('button');
+                optionBtn.className = 'option-btn';
+                optionBtn.textContent = option;
+                optionBtn.onclick = () => handleAnswer(index);
+                optionsContainer.appendChild(optionBtn);
+            });
+        }
+
+        // Обработка ответа
+        function handleAnswer(answerIndex) {
+            const testData = currentState.testData;
+            const questionData = testData.questions[testData.currentQuestion];
+            
+            const isCorrect = answerIndex === questionData.answer;
+            const userAnswer = questionData.options[answerIndex];
+            const correctAnswer = questionData.options[questionData.answer];
+            
+            if (isCorrect) {
+                testData.score++;
+            }
+            
+            testData.userAnswers.push({
+                question: questionData.question,
+                userAnswer,
+                correctAnswer,
+                isCorrect
+            });
+            
+            testData.currentQuestion++;
+            
+            if (testData.currentQuestion < testData.questions.length) {
+                showTestQuestion();
+            } else {
+                finishTest();
+            }
+        }
+
+        // Завершить тест
+        function finishTest() {
+            const testData = currentState.testData;
+            const totalQuestions = testData.questions.length;
+            
+            // Сохраняем результат
+            saveTestResults(
+                currentState.level,
+                currentState.topicType,
+                currentState.topic,
+                testData.score,
+                totalQuestions
+            );
+            
+            // Показываем результаты
+            document.getElementById('final-score').textContent = `${testData.score}/${totalQuestions}`;
+            
+            const percentage = totalQuestions > 0 ? Math.round((testData.score / totalQuestions) * 100) : 0;
+            document.getElementById('percentage').textContent = `${percentage}%`;
+            
+            // Детали ответов
+            const detailsDiv = document.getElementById('result-details');
+            detailsDiv.innerHTML = '<h3>Детали ответов:</h3>';
+            
+            testData.userAnswers.forEach((answer, index) => {
+                const answerClass = answer.isCorrect ? 'answer-correct' : 'answer-incorrect';
+                const answerDiv = document.createElement('div');
+                answerDiv.className = `answer-detail ${answerClass}`;
+                answerDiv.innerHTML = `
+                    <div><strong>Вопрос ${index + 1}:</strong> ${answer.question}</div>
+                    <div>Ваш ответ: ${answer.userAnswer}</div>
+                    ${!answer.isCorrect ? `<div>Правильный ответ: ${answer.correctAnswer}</div>` : ''}
+                `;
+                detailsDiv.appendChild(answerDiv);
+            });
+            
+            // Сообщение с оценкой
+            const messageDiv = document.getElementById('result-message');
+            if (percentage >= 80) {
+                messageDiv.innerHTML = '<i class="fas fa-star"></i> <strong>Отличный результат!</strong> Вы хорошо знаете эту тему!';
+                messageDiv.style.background = '#e8f5e9';
+            } else if (percentage >= 60) {
+                messageDiv.innerHTML = '<i class="fas fa-thumbs-up"></i> <strong>Хороший результат!</strong> Есть что повторить.';
+                messageDiv.style.background = '#fff3e0';
+            } else {
+                messageDiv.innerHTML = '<i class="fas fa-book"></i> <strong>Нужно повторить материал.</strong> Попробуйте еще раз!';
+                messageDiv.style.background = '#ffebee';
+            }
+            
+            showPage('page-test-result');
+        }
+
+        // Показать результаты
+        function showResults() {
+            document.getElementById('results-subtitle').textContent = `Уровень: ${currentState.level}`;
+            
+            const results = getUserResults(currentState.level);
+            const contentDiv = document.getElementById('results-content');
+            
+            if (results.length === 0) {
+                contentDiv.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--text-light);">
+                        <i class="fas fa-clipboard-list" style="font-size: 48px; margin-bottom: 20px;"></i>
+                        <h3>У вас пока нет результатов тестов</h3>
+                        <p>Пройдите тесты, чтобы увидеть здесь свой прогресс!</p>
+                    </div>
+                `;
+            } else {
+                let html = '<table class="results-table">';
+                html += `
+                    <thead>
+                        <tr>
+                            <th>Тема</th>
+                            <th>Тип</th>
+                            <th>Результат</th>
+                            <th>Процент</th>
+                            <th>Дата</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                `;
+                
+                results.forEach(result => {
+                    const percentage = result.total_questions > 0 ? 
+                        Math.round((result.score / result.total_questions) * 100) : 0;
+                    const date = new Date(result.last_attempt).toLocaleDateString();
+                    
+                    html += `
+                        <tr>
+                            <td>${result.topic_name}</td>
+                            <td>${result.topic_type === 'vocabulary' ? 'Словарь' : 'Грамматика'}</td>
+                            <td>${result.score}/${result.total_questions}</td>
+                            <td>
+                                <div>${percentage}%</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${percentage}%"></div>
+                                </div>
+                            </td>
+                            <td>${date}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += '</tbody></table>';
+                contentDiv.innerHTML = html;
+            }
+            
+            showPage('page-results');
+        }
+
+        // Навигационные функции
+        function backToLevels() {
+            currentState.level = null;
+            showPage('page-welcome');
+        }
+
+        function backToLevelMenu() {
+            showPage('page-level');
+        }
+
+        function backToTopicList() {
+            if (currentState.topicType === 'vocabulary') {
+                showVocabulary();
+            } else {
+                showGrammar();
+            }
+        }
+
+        function backToTopic() {
+            showTopic(currentState.topicType, currentState.topic);
+        }
+
+        function cancelTest() {
+            if (confirm('Вы уверены, что хотите отменить тест? Прогресс будет потерян.')) {
+                backToTopic();
+            }
+        }
+
+        function restartTest() {
+            startTest();
+        }
+
+        // Инициализация при загрузке
+        window.onload = function() {
+            initStorage();
+            showPage('page-welcome');
+        };
+    </script>
+</body>
+</html>
