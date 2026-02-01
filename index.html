@@ -6,6 +6,7 @@
     <title>English Learning Bot - Web Version</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Стили остались без изменений */
         :root {
             --primary: #0088cc;
             --primary-dark: #006699;
@@ -350,7 +351,7 @@
 
         .word-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 10px;
             margin: 20px 0;
         }
@@ -620,17 +621,23 @@
     </div>
 
     <script>
-        // Данные бота (аналогичные Python версии)
+        // Данные бота (ПОЛНЫЕ данные из Python файла)
         const LEVELS_DATA = {
             "A1-A2": {
                 "vocabulary": {
                     "topics": ["Основные глаголы", "Семья", "Еда", "Дом", "Работа"],
                     "words": {
                         "Основные глаголы": ["be", "have", "do", "go", "come", "see", "want", "need"],
-                        "Семья": ["mother", "father", "sister", "brother", "parents", "children"],
-                        "Еда": ["apple", "bread", "water", "coffee", "meat", "vegetables"],
-                        "Дом": ["room", "kitchen", "bed", "table", "chair", "window"],
-                        "Работа": ["work", "office", "colleague", "meeting", "computer", "desk"]
+                        "Семья": ["mother-мать", "father-отец", "sister-сестра", "brother-брат", "parents-родители",
+                                  "children-дети", "grandmother-бабушка", "grandfather-дедушка", "daughter-дочь", "son-сын", "aunt-тётя",
+                                  "uncle-дядя", "cousin-двоюродный брат/сестра", "husband-муж", "wife-жена"],
+                        "Еда": ["bread-хлеб", "water-вода", "milk-молоко", "meat-мясо", "fish-рыба", "egg-яйцо", "apple-яблоко", "vegetable-овощ",
+                                "fruit-фрукт", "cheese-сыр", "sugar-сахар", "salt-соль", "soup-суп", "breakfast-завтрак", "dinner-ужин"],
+                        "Дом": ["house-дом", "room-комната", "kitchen-кухня", "bathroom-ванная", "bedroom-спальня", "door-дверь", "window-окно",
+                                "table-стол", "chair-стул", "bed-кровать", "sofa-диван", "lamp-лампа", "floor-пол", "wall-стена", "roof-крыша"],
+                        "Работа": ["work-работа", "job-работа/должность", "office-офис", "boss-начальник", "colleague-коллега", "meeting-совещание",
+                                   "salary-зарплата", "task-задача","profession-профессия", "business-бизнес", "company-компания", "interview-собеседование", "career-карьера",
+                                   "project-проект", "vacation-отпуск"]
                     },
                     "tests": {
                         "Основные глаголы": [
@@ -653,6 +660,20 @@
                             {"question": "Переведите: вода", "options": ["bread", "apple", "water", "coffee"], "answer": 2},
                             {"question": "Переведите: кофе", "options": ["bread", "apple", "water", "coffee"], "answer": 3},
                             {"question": "Переведите: мясо", "options": ["vegetables", "meat", "fruit", "drink"], "answer": 1}
+                        ],
+                        "Дом": [
+                            {"question": "Переведите: дом", "options": ["house", "room", "kitchen", "bedroom"], "answer": 0},
+                            {"question": "Переведите: комната", "options": ["house", "room", "kitchen", "bedroom"], "answer": 1},
+                            {"question": "Переведите: кухня", "options": ["house", "room", "kitchen", "bedroom"], "answer": 2},
+                            {"question": "Переведите: спальня", "options": ["house", "room", "kitchen", "bedroom"], "answer": 3},
+                            {"question": "Переведите: окно", "options": ["door", "window", "table", "chair"], "answer": 1}
+                        ],
+                        "Работа": [
+                            {"question": "Переведите: работа", "options": ["work", "office", "meeting", "salary"], "answer": 0},
+                            {"question": "Переведите: офис", "options": ["work", "office", "meeting", "salary"], "answer": 1},
+                            {"question": "Переведите: собрание", "options": ["work", "office", "meeting", "salary"], "answer": 2},
+                            {"question": "Переведите: зарплата", "options": ["work", "office", "meeting", "salary"], "answer": 3},
+                            {"question": "Переведите: коллега", "options": ["boss", "colleague", "client", "manager"], "answer": 1}
                         ]
                     }
                 },
@@ -678,6 +699,20 @@
                             {"question": "___ sun is shining.", "options": ["A", "An", "The", "-"], "answer": 2},
                             {"question": "She is _ doctor.", "options": ["a", "an", "the", "-"], "answer": 0},
                             {"question": "I don't like _ milk.", "options": ["a", "an", "the", "-"], "answer": 3}
+                        ],
+                        "Множественное число": [
+                            {"question": "One cat, two _", "options": ["cat", "cats", "cates", "cat's"], "answer": 1},
+                            {"question": "One child, many _", "options": ["childs", "children", "child", "childrens"], "answer": 1},
+                            {"question": "One man, two _", "options": ["mans", "men", "man", "mens"], "answer": 1},
+                            {"question": "One woman, many _", "options": ["womans", "women", "woman", "womens"], "answer": 1},
+                            {"question": "One box, three _", "options": ["boxs", "boxes", "box", "boxses"], "answer": 1}
+                        ],
+                        "Притяжательные местоимения": [
+                            {"question": "This is _ (я) book.", "options": ["my", "I", "me", "mine"], "answer": 0},
+                            {"question": "That is _ (ты) pen.", "options": ["your", "you", "yours", "your's"], "answer": 0},
+                            {"question": "This is _ (он) house.", "options": ["his", "he", "him", "he's"], "answer": 0},
+                            {"question": "That is _ (она) car.", "options": ["her", "she", "hers", "she's"], "answer": 0},
+                            {"question": "This is _ (мы) school.", "options": ["our", "we", "us", "ours"], "answer": 0}
                         ]
                     }
                 }
@@ -686,23 +721,49 @@
                 "vocabulary": {
                     "topics": ["Идиомы", "Деловая лексика", "Академические слова", "Фразовые глаголы"],
                     "words": {
-                        "Идиомы": ["break the ice", "piece of cake", "hit the books", "cost an arm and a leg"],
-                        "Деловая лексика": ["negotiate", "deadline", "budget", "strategy", "efficient"],
-                        "Академические слова": ["analyze", "conclude", "evidence", "theory", "research"],
-                        "Фразовые глаголы": ["give up", "look forward to", "get along with", "run out of"]
+                        "Идиомы": ["Break the ice – начать общение в незнакомой компании или ситуации.","A piece of cake – очень просто, пустяковое дело.","Hit the books – усердно учиться, заниматься.","Cost an arm and a leg – стоить очень дорого.","Call it a day – заканчивать работу на сегодня.","Cut corners – делать что-то некачественно, чтобы сэкономить время или деньги.","Get out of hand – выйти из-под контроля, стать неуправляемым.","Hit the nail on the head – попасть в самую точку, сказать точно в цель.",
+                                "It's not rocket science – это не высшая математика (несложно для понимания).","Miss the boat – упустить выгодную возможность.","On the ball – сообразительный, внимательный, работающий эффективно.",
+                                "Pull someone's leg – разыгрывать кого-либо, шутить.","Under the weather – чувствовать себя неважно, приболеть."],
+                        "Деловая лексика": ["To meet a deadline – уложиться в срок.", "To run a meeting – проводить собрание.", "A startup – стартап.", "A stakeholder – заинтересованная сторона (клиент, сотрудник, инвестор)", "A budget – бюджет.",
+                                            "To launch a product – выпустить продукт на рынок.", "A merger – слияние компаний.", "A takeover – поглощение компании.", "To negotiate a deal – вести переговоры по сделке.",
+                                            "A quarterly report – квартальный отчёт.", "To submit a proposal – подать/представить предложение.", "To work freelance – работать на фрилансе.", "Remote work – удалённая работа.", "A milestone – важный этап, веха в проекте."],
+                        "Академические слова": [ "To conduct research – проводить исследование.", "A significant finding – значимое открытие/результат.", "To analyze data – анализировать данные.",
+                                                "To draw a conclusion – сделать вывод.", "To support an argument – поддерживать аргумент.", "In contrast – в противоположность, в отличие от.",
+                                                "Furthermore / Moreover – более того.", "Therefore / Thus – следовательно, таким образом.", "A hypothesis – гипотеза.", "A source – источник.", "To cite a source – цитировать источник.",
+                                                "To paraphrase – перефразировать.", "An overview – обзор.", "A framework – структура, рамки, основа."],
+                        "Фразовые глаголы": ["To carry out (a plan, research) – выполнять, проводить (план, исследование).", "To come up with (an idea) – придумать (идею).", "To cut down on (costs, sugar) – сократить (расходы, потребление сахара).",
+                                            "To find out (information) – выяснить (информацию).", "To get along with (someone) – ладить (с кем-либо).", "To give up (smoking) – бросить (курить).",
+                                            "To look into (a problem) – изучить, рассмотреть (проблему).", "To point out (a mistake) – указать (на ошибку).", "To put off (a meeting) – откладывать (встречу).",
+                                            "To set up (a company) – основать, создать (компанию).", "To take over (a company) – взять на себя управление, поглотить (компанию).", "To turn down (an offer) – отклонить (предложение)."]
                     },
                     "tests": {
                         "Идиомы": [
                             {"question": "What does 'break the ice' mean?", "options": ["To start a conversation", "To break something", "To be cold", "To make friends"], "answer": 0},
                             {"question": "What does 'piece of cake' mean?", "options": ["Something delicious", "Something easy", "A dessert", "A problem"], "answer": 1},
                             {"question": "What does 'hit the books' mean?", "options": ["To study hard", "To destroy books", "To buy books", "To organize books"], "answer": 0},
-                            {"question": "What does 'cost an arm and a leg' mean?", "options": ["To be expensive", "To be painful", "To be dangerous", "To be valuable"], "answer": 0}
+                            {"question": "What does 'cost an arm and a leg' mean?", "options": ["To be expensive", "To be painful", "To be dangerous", "To be valuable"], "answer": 0},
+                            {"question": "What does 'call it a day' mean?", "options": ["To finish work for the day", "To name a day", "To call someone", "To plan a day"], "answer": 0}
                         ],
                         "Деловая лексика": [
                             {"question": "Переведите: переговоры", "options": ["negotiation", "deadline", "budget", "strategy"], "answer": 0},
                             {"question": "Переведите: срок сдачи", "options": ["negotiation", "deadline", "budget", "strategy"], "answer": 1},
                             {"question": "Переведите: бюджет", "options": ["negotiation", "deadline", "budget", "strategy"], "answer": 2},
-                            {"question": "Переведите: стратегия", "options": ["negotiation", "deadline", "budget", "strategy"], "answer": 3}
+                            {"question": "Переведите: стратегия", "options": ["negotiation", "deadline", "budget", "strategy"], "answer": 3},
+                            {"question": "Что означает 'to meet a deadline'?", "options": ["Уложиться в срок", "Провести встречу", "Составить бюджет", "Нанять сотрудника"], "answer": 0}
+                        ],
+                        "Академические слова": [
+                            {"question": "Переведите: проводить исследование", "options": ["To conduct research", "To analyze data", "To draw a conclusion", "To support an argument"], "answer": 0},
+                            {"question": "Переведите: анализировать данные", "options": ["To conduct research", "To analyze data", "To draw a conclusion", "To support an argument"], "answer": 1},
+                            {"question": "Переведите: сделать вывод", "options": ["To conduct research", "To analyze data", "To draw a conclusion", "To support an argument"], "answer": 2},
+                            {"question": "Переведите: поддерживать аргумент", "options": ["To conduct research", "To analyze data", "To draw a conclusion", "To support an argument"], "answer": 3},
+                            {"question": "Что означает 'in contrast'?", "options": ["В противоположность", "Более того", "Следовательно", "Например"], "answer": 0}
+                        ],
+                        "Фразовые глаголы": [
+                            {"question": "What does 'give up' mean?", "options": ["To quit", "To start", "To continue", "To improve"], "answer": 0},
+                            {"question": "What does 'look into' mean?", "options": ["To investigate", "To ignore", "To watch", "To find"], "answer": 0},
+                            {"question": "What does 'set up' mean?", "options": ["To establish", "To destroy", "To organize", "To close"], "answer": 0},
+                            {"question": "What does 'turn down' mean?", "options": ["To reject", "To accept", "To consider", "To negotiate"], "answer": 0},
+                            {"question": "Что означает 'get along with'?", "options": ["Ладить с кем-либо", "Ссориться с кем-либо", "Игнорировать кого-либо", "Помогать кому-либо"], "answer": 0}
                         ]
                     }
                 },
@@ -719,13 +780,29 @@
                             {"question": "I _ (never/see) that movie.", "options": ["never saw", "have never seen", "never see", "am never seeing"], "answer": 1},
                             {"question": "She _ (already/finish) her homework.", "options": ["already finishes", "has already finished", "already finished", "is already finishing"], "answer": 1},
                             {"question": "___ you ever _ (be) to Paris?", "options": ["Did/be", "Have/been", "Do/be", "Are/being"], "answer": 1},
-                            {"question": "They _ (not/start) the project yet.", "options": ["didn't start", "haven't started", "don't start", "aren't starting"], "answer": 1}
+                            {"question": "They _ (not/start) the project yet.", "options": ["didn't start", "haven't started", "don't start", "aren't starting"], "answer": 1},
+                            {"question": "How long _ you _ (know) him?", "options": ["have/know", "have/known", "do/know", "are/knowing"], "answer": 1}
                         ],
                         "Условные предложения": [
                             {"question": "If I _ (have) money, I would buy a car.", "options": ["have", "had", "will have", "would have"], "answer": 1},
                             {"question": "If she _ (study) harder, she would pass the exam.", "options": ["studies", "studied", "will study", "would study"], "answer": 1},
                             {"question": "What would you do if you _ (win) the lottery?", "options": ["win", "won", "will win", "would win"], "answer": 1},
-                            {"question": "If I _ (be) you, I would apologize.", "options": ["am", "was", "were", "would be"], "answer": 2}
+                            {"question": "If I _ (be) you, I would apologize.", "options": ["am", "was", "were", "would be"], "answer": 2},
+                            {"question": "If they _ (invite) us, we would go.", "options": ["invite", "invited", "will invite", "would invite"], "answer": 1}
+                        ],
+                        "Пассивный залог": [
+                            {"question": "The letter _ (send) yesterday.", "options": ["was sent", "sent", "has sent", "is sent"], "answer": 0},
+                            {"question": "The house _ (build) last year.", "options": ["was built", "built", "has built", "is built"], "answer": 0},
+                            {"question": "English _ (speak) all over the world.", "options": ["is spoken", "speaks", "has spoken", "was spoken"], "answer": 0},
+                            {"question": "The cake _ (eat) by the children.", "options": ["was eaten", "ate", "has eaten", "is eaten"], "answer": 0},
+                            {"question": "The report _ (write) now.", "options": ["is being written", "is written", "writes", "has written"], "answer": 0}
+                        ],
+                        "Косвенная речь": [
+                            {"question": "She said: 'I am happy.' → She said that she _ happy.", "options": ["was", "is", "has been", "will be"], "answer": 0},
+                            {"question": "He said: 'I will come.' → He said that he _ come.", "options": ["would", "will", "is going to", "shall"], "answer": 0},
+                            {"question": "They said: 'We have finished.' → They said that they _ finished.", "options": ["had", "have", "has", "were"], "answer": 0},
+                            {"question": "She said: 'I can help.' → She said that she _ help.", "options": ["could", "can", "will", "would"], "answer": 0},
+                            {"question": "He said: 'I must go.' → He said that he _ go.", "options": ["had to", "must", "has to", "needs to"], "answer": 0}
                         ]
                     }
                 }
@@ -734,23 +811,50 @@
                 "vocabulary": {
                     "topics": ["Продвинутая лексика", "Синонимы", "Антонимы", "Сложные идиомы"],
                     "words": {
-                        "Продвинутая лексика": ["ubiquitous", "ephemeral", "serendipity", "quintessential", "paradigm"],
-                        "Синонимы": ["happy: joyful, delighted, ecstatic", "big: enormous, gigantic, colossal"],
-                        "Антонимы": ["benevolent - malevolent", "ephemeral - permanent", "ambiguous - clear"],
-                        "Сложные идиомы": ["bite the bullet", "the ball is in your court", "burn the midnight oil"]
+                        "Продвинутая лексика": ["ubiquitous-присутствующий повсюду, повсеместно", "ephemeral-недолговечный, быстро проходящий",
+                                                "serendipity-способность находить что-то важное случайно", "quintessential-самый совершенный пример чего-либо", "paradigm-система форм, модель, образец",
+                                                "ambivalent-испытывающий противоречивые чувства", "dichotomy-разделение на две части", "conundrum-сложная проблема, головоломка",
+                                                "lucid-ясный, понятный", "prolific-плодовитый, продуктивный"],
+                        "Синонимы": ["happy: joyful(радостный), delighted(восхищенный), ecstatic(восторженный)", "big: enormous(огромный), gigantic(гигантский), colossal(колоссальный)",
+                                    "intelligent: clever(умный), brilliant(блестящий), astute(проницательный)", "beautiful: gorgeous(великолепный), stunning(ошеломляющий), exquisite(изысканный)",
+                                    "difficult: challenging(сложный), arduous(трудный), formidable(грозный)"],
+                        "Антонимы": ["benevolent(доброжелательный) - malevolent(злобный)", "ephemeral(мимолётный) - permanent(постоянный)", "ambiguous (двусмысленный) - clear(ясный)",
+                                    "prolific(плодовитый) - barren(бесплодный)", "lucid(ясный) - obscure(неясный)", "ubiquitous(повсеместный) - rare(редкий)",
+                                    "quintessential(наиболее типичный) - atypical(нетипичный)", "ambivalent(противоречивый) - decisive(решительный)"],
+                        "Сложные идиомы": ["bite the bullet - решиться на что-то неприятное, но необходимое", "the ball is in your court - теперь твоя очередь действовать",
+                                        "burn the midnight oil - работать допоздна, засиживаться до поздна", "a blessing in disguise - скрытое благо, неудача, которая оборачивается удачей",
+                                        "cutting-edge - передовой, самый современный", "a dime a dozen - что-то очень распространенное, дешевое",
+                                        "face the music - мужественно принимать последствия", "get cold feet - струсить, потерять уверенность",
+                                        "in a nutshell - в двух словах, кратко", "on cloud nine - на седьмом небе от счастья"]
                     },
                     "tests": {
                         "Продвинутая лексика": [
                             {"question": "What does 'ubiquitous' mean?", "options": ["Found everywhere", "Very large", "Beautiful", "Dangerous"], "answer": 0},
                             {"question": "What does 'ephemeral' mean?", "options": ["Lasting a very short time", "Very expensive", "Extremely happy", "Complicated"], "answer": 0},
                             {"question": "What does 'serendipity' mean?", "options": ["Happy accident", "Sad event", "Planned outcome", "Unexpected problem"], "answer": 0},
-                            {"question": "What does 'quintessential' mean?", "options": ["Perfect example", "Very small", "Completely wrong", "Extremely fast"], "answer": 0}
+                            {"question": "What does 'quintessential' mean?", "options": ["Perfect example", "Very small", "Completely wrong", "Extremely fast"], "answer": 0},
+                            {"question": "What does 'ambivalent' mean?", "options": ["Having mixed feelings", "Very clear", "Extremely happy", "Completely certain"], "answer": 0}
                         ],
                         "Синонимы": [
                             {"question": "Synonym for 'intelligent'", "options": ["clever", "stupid", "slow", "simple"], "answer": 0},
                             {"question": "Synonym for 'beautiful'", "options": ["gorgeous", "ugly", "plain", "ordinary"], "answer": 0},
                             {"question": "Synonym for 'difficult'", "options": ["challenging", "easy", "simple", "basic"], "answer": 0},
-                            {"question": "Synonym for 'important'", "options": ["significant", "unimportant", "minor", "trivial"], "answer": 0}
+                            {"question": "Synonym for 'important'", "options": ["significant", "unimportant", "minor", "trivial"], "answer": 0},
+                            {"question": "Synonym for 'happy'", "options": ["joyful", "sad", "angry", "bored"], "answer": 0}
+                        ],
+                        "Антонимы": [
+                            {"question": "Antonym for 'benevolent'", "options": ["malevolent", "kind", "generous", "friendly"], "answer": 0},
+                            {"question": "Antonym for 'ephemeral'", "options": ["permanent", "temporary", "brief", "short"], "answer": 0},
+                            {"question": "Antonym for 'ambiguous'", "options": ["clear", "vague", "unclear", "confusing"], "answer": 0},
+                            {"question": "Antonym for 'prolific'", "options": ["barren", "productive", "fruitful", "creative"], "answer": 0},
+                            {"question": "Antonym for 'ubiquitous'", "options": ["rare", "common", "widespread", "everywhere"], "answer": 0}
+                        ],
+                        "Сложные идиомы": [
+                            {"question": "What does 'bite the bullet' mean?", "options": ["To endure a painful situation", "To eat something hard", "To avoid a problem", "To make a decision quickly"], "answer": 0},
+                            {"question": "What does 'the ball is in your court' mean?", "options": ["It's your turn to act", "You have the ball", "You should play tennis", "You are in control of the game"], "answer": 0},
+                            {"question": "What does 'burn the midnight oil' mean?", "options": ["To work late into the night", "To have a fire", "To waste time", "To study during the day"], "answer": 0},
+                            {"question": "What does 'a blessing in disguise' mean?", "options": ["Something good that isn't recognized at first", "A hidden gift", "A religious experience", "A secret advantage"], "answer": 0},
+                            {"question": "What does 'cutting-edge' mean?", "options": ["Very modern and advanced", "Sharp and dangerous", "Old-fashioned", "Experimental and risky"], "answer": 0}
                         ]
                     }
                 },
@@ -767,13 +871,29 @@
                             {"question": "Never _ I been so surprised.", "options": ["have", "has", "had", "did"], "answer": 0},
                             {"question": "Not only _ she speak French, but also Spanish.", "options": ["does", "do", "is", "has"], "answer": 0},
                             {"question": "Hardly _ I arrived when it started to rain.", "options": ["had", "have", "did", "was"], "answer": 0},
-                            {"question": "Little _ she know about the surprise.", "options": ["did", "does", "has", "is"], "answer": 0}
+                            {"question": "Little _ she know about the surprise.", "options": ["did", "does", "has", "is"], "answer": 0},
+                            {"question": "Rarely _ such a beautiful sunset.", "options": ["have I seen", "I have seen", "I saw", "did I see"], "answer": 0}
                         ],
                         "Смешанные условные": [
                             {"question": "If I _ (know), I would have told you.", "options": ["knew", "had known", "would know", "know"], "answer": 1},
                             {"question": "If she _ (not/be) so tired, she would have gone to the party.", "options": ["weren't", "hadn't been", "wouldn't be", "isn't"], "answer": 1},
                             {"question": "He would be happier if he _ (accept) that job offer.", "options": ["accepted", "had accepted", "would accept", "accepts"], "answer": 1},
-                            {"question": "If they _ (invite) us, we would have come.", "options": ["invited", "had invited", "would invite", "invite"], "answer": 1}
+                            {"question": "If they _ (invite) us, we would have come.", "options": ["invited", "had invited", "would invite", "invite"], "answer": 1},
+                            {"question": "If I _ (have) more time, I would have finished the project.", "options": ["had", "had had", "would have", "have"], "answer": 1}
+                        ],
+                        "Эллипсис": [
+                            {"question": "She can play the piano and he _ the guitar.", "options": ["can", "can play", "plays", "play"], "answer": 1},
+                            {"question": "John will go to Paris and Mary _ to London.", "options": ["will", "will go", "goes", "go"], "answer": 1},
+                            {"question": "I have finished my work and she _ hers.", "options": ["has", "has finished", "finished", "finish"], "answer": 1},
+                            {"question": "He is studying French and she _ German.", "options": ["is", "is studying", "studies", "study"], "answer": 1},
+                            {"question": "They were watching TV and we _ a movie.", "options": ["were", "were watching", "watched", "watch"], "answer": 1}
+                        ],
+                        "Сложные времена": [
+                            {"question": "By next year, I _ (work) here for 10 years.", "options": ["will have been working", "will work", "have worked", "am working"], "answer": 0},
+                            {"question": "She _ (study) for three hours when you called.", "options": ["had been studying", "has been studying", "was studying", "studied"], "answer": 0},
+                            {"question": "By the time we arrive, they _ (leave).", "options": ["will have left", "will leave", "leave", "are leaving"], "answer": 0},
+                            {"question": "I _ (wait) for an hour when the bus finally came.", "options": ["had been waiting", "have been waiting", "was waiting", "waited"], "answer": 0},
+                            {"question": "They _ (build) the house for two years before they sold it.", "options": ["had been building", "have been building", "were building", "built"], "answer": 0}
                         ]
                     }
                 }
